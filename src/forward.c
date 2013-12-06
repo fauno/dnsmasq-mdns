@@ -543,8 +543,14 @@ void reply_query(int fd, int family, time_t now)
   /* spoof check: answer must come from known server, */
   for (server = daemon->servers; server; server = server->next)
     if (!(server->flags & (SERV_LITERAL_ADDRESS | SERV_NO_ADDR)) &&
-	sockaddr_isequal(&server->addr, &serveraddr))
+	      sockaddr_isequal(&server->addr, &serveraddr))
+    {
       break;
+    } else 
+    {
+      if (!sockaddr_ismdns(&server->addr, &serveraddr))
+        break;
+    }
    
   header = (struct dns_header *)daemon->packet;
   
