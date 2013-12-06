@@ -265,6 +265,19 @@ int sockaddr_isequal(union mysockaddr *s1, union mysockaddr *s2)
   return 0;
 }
 
+int sockaddr_ismdns(union mysockaddr *s1, union mysockaddr *s2)
+{
+  if (s1->sa.sa_family == s2->sa.sa_family)
+    { 
+      if (s1->sa.sa_family == AF_INET &&
+	  s1->in.sin_port == s2->in.sin_port &&
+	  strcmp(inet_ntoa(s1->in.sin_addr), "224.0.0.251") != 0)
+	return 1;
+    }
+
+  return 0;
+}
+
 int sa_len(union mysockaddr *addr)
 {
 #ifdef HAVE_SOCKADDR_SA_LEN
